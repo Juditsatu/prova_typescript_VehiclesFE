@@ -10,20 +10,32 @@ function submitCar() {
 	//EX1. Validar los campos de matricula (formato: 1234ABC), marca y color, antes de hacer el new Car
 	const validPlate = /^[0-9]{4}[A-Z]{3}/;
     const onlyLetters = /^[a-zA-Z]+$/;
+    
+    plateInput.classList.remove("is-invalid");
+    brandInput.classList.remove("is-invalid");
+    colorInput.classList.remove("is-invalid");
 
-    if(validPlate.test(plateInput.value) == false || onlyLetters.test(brandInput.value) == false || onlyLetters.test(colorInput.value) == false) {
-        plateInput.classList.add('is-invalid');
-        brandInput.classList.add('is-invalid');
-        colorInput.classList.add('is-invalid');
-        errores++;
-    } else {
-        plateInput.classList.remove('is-invalid');
-        brandInput.classList.remove('is-invalid');
-        colorInput.classList.remove('is-invalid');
-        car = new Car(plateInput.value, colorInput.value, brandInput.value);
-        showVehicle();
-        showWheelForm();
+    if (validPlate.test(plateInput.value) == false) {
+      plateInput.classList.add("is-invalid");
+      errores++;
     }
+
+    if (onlyLetters.test(brandInput.value) == false) {
+      brandInput.classList.add("is-invalid");
+      errores++;
+    }
+
+    if (onlyLetters.test(colorInput.value) == false) {
+      colorInput.classList.add("is-invalid");
+      errores++;
+    }
+
+    if (errores == 0) {
+      car = new Car(plateInput.value, colorInput.value, brandInput.value);
+      showVehicle();
+      showWheelForm();
+    }
+
 }
 
 function showVehicle() {
@@ -39,6 +51,10 @@ function showVehicle() {
 
 }
 
+function validateDiameter(diameter: number) {
+    return diameter < 2 || diameter > 0 ? true : false;
+}
+
 function submitWheelForm(event: any) {
     let errores = 0;
     const onlyLetters = /^[a-zA-Z]+$/;
@@ -51,16 +67,27 @@ function submitWheelForm(event: any) {
 		let brandWheel = <HTMLInputElement>document.getElementById("brandWheel" + i);
 		let diameterWheel = <HTMLInputElement>document.getElementById("diameterWheel" + i);
 
-        if (diameterRequired.test(diameterWheel.value) == false || onlyLetters.test(brandWheel.value) == false || diameterWheel.value == "") {
+        diameterWheel.classList.remove('is-invalid');
+        brandWheel.classList.remove('is-invalid');
+        
+        if (validateDiameter(Number(diameterWheel.value)) == false || diameterWheel.value == "") {
             diameterWheel.classList.add('is-invalid');
+            errores++;
+        }
+
+        if (onlyLetters.test(brandWheel.value) == false) {
             brandWheel.classList.add('is-invalid');
             errores++;
-        } else if (errores === 0) {
-            diameterWheel.classList.remove('is-invalid');
-            brandWheel.classList.remove('is-invalid');
-            let wheel_generica = new Wheel(Number(diameterWheel.value), brandWheel.value);
-            car.addWheel(wheel_generica);
-        };
+        }
+        console.log("error diameter", errores)
+        console.log("error brand", errores)
+
+        if (errores == 0) {
+            for (let i = 1; i <= 4; i++) {
+                let wheel_generica = new Wheel(Number(diameterWheel.value), brandWheel.value);
+                car.addWheel(wheel_generica);
+            }
+        }
 	};
     if (errores > 0) {
         alert("Please fill all fields");
