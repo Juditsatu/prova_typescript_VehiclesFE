@@ -8,13 +8,13 @@ function submitCar() {
     let colorInput = <HTMLInputElement>document.getElementById("colorInput");
 
 	//EX1. Validar los campos de matricula (formato: 1234ABC), marca y color, antes de hacer el new Car
-	const validPlate = /^[0-9]{4}[A-Z]{3}/;
-    const onlyLetters = /^[a-zA-Z]+$/;
+	const validPlate = /^[0-9]{4}[A-Z]{3}/;//regex validate plate
+    const onlyLetters = /^[a-zA-Z]+$/; //regex letter only
     
     plateInput.classList.remove("is-invalid");
     brandInput.classList.remove("is-invalid");
     colorInput.classList.remove("is-invalid");
-
+    
     if (validPlate.test(plateInput.value) == false) {
       plateInput.classList.add("is-invalid");
       errores++;
@@ -35,7 +35,6 @@ function submitCar() {
       showVehicle();
       showWheelForm();
     }
-
 }
 
 function showVehicle() {
@@ -52,6 +51,7 @@ function showVehicle() {
 }
 
 function validateDiameter(diameter: number) {
+    //boolean that returns a number. Check if diameter 1-2 is true
     return diameter < 2 || diameter > 0 ? true : false;
 }
 
@@ -62,6 +62,7 @@ function submitWheelForm() {
 	//EX2. Solo hacer el "new Wheel" si las 4 ruedas son correctas
 	//EX3. Una rueda correcta deberá tener un diámetro entre 1 y 2. Crear una función para validarlas
 
+    //loop to validate fields
 	for (let i = 1; i <= 4; i++) {
 		let brandWheel = <HTMLInputElement>document.getElementById("brandWheel" + i);
 		let diameterWheel = <HTMLInputElement>document.getElementById("diameterWheel" + i);
@@ -69,6 +70,7 @@ function submitWheelForm() {
         diameterWheel.classList.remove('is-invalid');
         brandWheel.classList.remove('is-invalid');
         
+        //call function to validate diameter
         let checkDiameter = validateDiameter(Number(diameterWheel.value)) == false;
         
         //Validate if wheel contains numbers between 1 and 2
@@ -83,6 +85,7 @@ function submitWheelForm() {
         }
 	};
 
+    //if all fields are ok create new wheel
     if (errores == 0) {
         for (let i = 1; i <= 4; i++) {
             let brandWheel = <HTMLInputElement>document.getElementById("brandWheel" + i);
