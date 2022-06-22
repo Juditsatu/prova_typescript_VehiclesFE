@@ -42,10 +42,9 @@ function showVehicle() {
 function validateDiameter(diameter) {
     return diameter < 2 || diameter > 0 ? true : false;
 }
-function submitWheelForm(event) {
+function submitWheelForm() {
     var errores = 0;
     var onlyLetters = /^[a-zA-Z]+$/;
-    var diameterRequired = /[1-2]/;
     //EX2. Solo hacer el "new Wheel" si las 4 ruedas son correctas
     //EX3. Una rueda correcta deberá tener un diámetro entre 1 y 2. Crear una función para validarlas
     for (var i = 1; i <= 4; i++) {
@@ -53,31 +52,31 @@ function submitWheelForm(event) {
         var diameterWheel = document.getElementById("diameterWheel" + i);
         diameterWheel.classList.remove('is-invalid');
         brandWheel.classList.remove('is-invalid');
-        if (validateDiameter(Number(diameterWheel.value)) == false || diameterWheel.value == "") {
+        var checkDiameter = validateDiameter(Number(diameterWheel.value)) == false;
+        //Validate if wheel contains numbers between 1 and 2
+        if (checkDiameter || diameterWheel.value == "") {
             diameterWheel.classList.add('is-invalid');
             errores++;
         }
+        //Validate if brand contains only letters
         if (onlyLetters.test(brandWheel.value) == false) {
             brandWheel.classList.add('is-invalid');
             errores++;
         }
-        console.log("error diameter", errores);
-        console.log("error brand", errores);
-        if (errores == 0) {
-            for (var i_1 = 1; i_1 <= 4; i_1++) {
-                var wheel_generica = new Wheel(Number(diameterWheel.value), brandWheel.value);
-                car.addWheel(wheel_generica);
-            }
-        }
     }
     ;
-    if (errores > 0) {
-        alert("Please fill all fields");
-    }
-    else {
+    if (errores == 0) {
+        for (var i = 1; i <= 4; i++) {
+            var brandWheel = document.getElementById("brandWheel" + i);
+            var diameterWheel = document.getElementById("diameterWheel" + i);
+            var wheel_generica = new Wheel(Number(diameterWheel.value), brandWheel.value);
+            car.addWheel(wheel_generica);
+        }
         showWheels();
     }
-    ;
+    else {
+        alert("Please fill all fields");
+    }
     console.log(car);
 }
 function showWheels() {

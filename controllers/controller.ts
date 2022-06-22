@@ -55,10 +55,9 @@ function validateDiameter(diameter: number) {
     return diameter < 2 || diameter > 0 ? true : false;
 }
 
-function submitWheelForm(event: any) {
+function submitWheelForm() {
     let errores = 0;
     const onlyLetters = /^[a-zA-Z]+$/;
-    const diameterRequired = /[1-2]/;
 
 	//EX2. Solo hacer el "new Wheel" si las 4 ruedas son correctas
 	//EX3. Una rueda correcta deberá tener un diámetro entre 1 y 2. Crear una función para validarlas
@@ -70,30 +69,33 @@ function submitWheelForm(event: any) {
         diameterWheel.classList.remove('is-invalid');
         brandWheel.classList.remove('is-invalid');
         
-        if (validateDiameter(Number(diameterWheel.value)) == false || diameterWheel.value == "") {
+        let checkDiameter = validateDiameter(Number(diameterWheel.value)) == false;
+        
+        //Validate if wheel contains numbers between 1 and 2
+        if (checkDiameter || diameterWheel.value == "") {
             diameterWheel.classList.add('is-invalid');
             errores++;
         }
-
+        //Validate if brand contains only letters
         if (onlyLetters.test(brandWheel.value) == false) {
             brandWheel.classList.add('is-invalid');
             errores++;
         }
-        console.log("error diameter", errores)
-        console.log("error brand", errores)
-
-        if (errores == 0) {
-            for (let i = 1; i <= 4; i++) {
-                let wheel_generica = new Wheel(Number(diameterWheel.value), brandWheel.value);
-                car.addWheel(wheel_generica);
-            }
-        }
 	};
-    if (errores > 0) {
-        alert("Please fill all fields");
-    } else {
+
+    if (errores == 0) {
+        for (let i = 1; i <= 4; i++) {
+            let brandWheel = <HTMLInputElement>document.getElementById("brandWheel" + i);
+		    let diameterWheel = <HTMLInputElement>document.getElementById("diameterWheel" + i);
+            
+            let wheel_generica = new Wheel(Number(diameterWheel.value), brandWheel.value);
+            car.addWheel(wheel_generica);
+        }
         showWheels();
-    };
+    } else {
+        alert("Please fill all fields");
+    }
+
 	console.log(car);
 }
 
